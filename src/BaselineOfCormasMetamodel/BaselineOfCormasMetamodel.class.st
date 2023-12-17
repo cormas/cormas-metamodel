@@ -41,9 +41,14 @@ BaselineOfCormasMetamodel >> specForPackages: spec [
 		package: 'Cormas-Metamodel'
 		with: [ spec requires: #('Cormas') ];
 		
+		package: 'Cormas-Metamodel-Metamodel';
+		
 		package: 'Cormas-Metamodel-Famix'
-		with: [ spec requires: 'Famix' ];
+		with: [ spec requires: #('Famix' 'Cormas-Metamodel-Metamodel') ];
+		
+		package: 'Cormas-Metamodel-Famix-Behaviour'
+		with: [ spec requires: #('Cormas-Metamodel-Famix') ];
 		
 		package: 'Cormas-Metamodel-Tests'
-		with: [ spec requires: #('Cormas-Metamodel' 'Cormas-Metamodel-Famix') ].
+		with: [ spec requires: #('Cormas-Metamodel' 'Cormas-Metamodel-Famix' 'Cormas-Metamodel-Famix-Behaviour') ].
 ]

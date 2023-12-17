@@ -1,26 +1,22 @@
-"
-Abstract tests of how a CormasClass should behave
-"
-Class {
-	#name : #CMClassTest,
-	#superclass : #TestCase,
+Trait {
+	#name : #TCMMetaClassTest,
 	#category : #'Cormas-metamodel-tests'
 }
 
 { #category : #running }
-CMClassTest >> cormasClassNamed: aString [
+TCMMetaClassTest >> cormasClassNamed: aString [
 
-	self subclassResponsibility 
+	self explicitRequirement  
 ]
 
 { #category : #running }
-CMClassTest >> newCormasInstanceFor: aCormasClass [
+TCMMetaClassTest >> newCormasInstanceFor: aCormasClass [
 
-	self subclassResponsibility 
+	self explicitRequirement  
 ]
 
 { #category : #tests }
-CMClassTest >> testCormasClassKnowsItsInstances [
+TCMMetaClassTest >> testCormasClassKnowsItsInstances [
 
 	| class instance |
 	class := self cormasClassNamed: 'Cow'.
@@ -31,7 +27,7 @@ CMClassTest >> testCormasClassKnowsItsInstances [
 ]
 
 { #category : #tests }
-CMClassTest >> testNewCormasClassHasAName [
+TCMMetaClassTest >> testNewCormasClassHasAName [
 
 	| class |
 	class := self cormasClassNamed: 'Cow'.
@@ -40,7 +36,7 @@ CMClassTest >> testNewCormasClassHasAName [
 ]
 
 { #category : #tests }
-CMClassTest >> testNewCormasClassHasNoInstance [
+TCMMetaClassTest >> testNewCormasClassHasNoInstance [
 
 	| class |
 	class := self cormasClassNamed: 'Cow'.
@@ -49,7 +45,7 @@ CMClassTest >> testNewCormasClassHasNoInstance [
 ]
 
 { #category : #tests }
-CMClassTest >> testNewCormasInstanceKnowsItsClass [
+TCMMetaClassTest >> testNewCormasInstanceKnowsItsClass [
 
 	| class instance |
 	class := self cormasClassNamed: 'Cow'.
