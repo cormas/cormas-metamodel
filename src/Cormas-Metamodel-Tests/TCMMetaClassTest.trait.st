@@ -4,7 +4,19 @@ Trait {
 }
 
 { #category : #running }
+TCMMetaClassTest >> classOfInstance: anObject [
+
+	self explicitRequirement  
+]
+
+{ #category : #running }
 TCMMetaClassTest >> cormasClassNamed: aString [
+
+	self explicitRequirement  
+]
+
+{ #category : #running }
+TCMMetaClassTest >> instancesOfClass: aClass [
 
 	self explicitRequirement  
 ]
@@ -19,11 +31,13 @@ TCMMetaClassTest >> newCormasInstanceFor: aCormasClass [
 TCMMetaClassTest >> testCormasClassKnowsItsInstances [
 
 	| class instance |
+	Smalltalk image garbageCollect.
+	
 	class := self cormasClassNamed: 'Cow'.
 	instance := self newCormasInstanceFor: class.
 
-	self assert: class cormasInstances size equals: 1.
-	self assert: (class cormasInstances includes: instance).
+	self assert: (self instancesOfClass: class) size equals: 1.
+	self assert: ((self instancesOfClass: class) includes: instance).
 ]
 
 { #category : #tests }
@@ -41,7 +55,7 @@ TCMMetaClassTest >> testNewCormasClassHasNoInstance [
 	| class |
 	class := self cormasClassNamed: 'Cow'.
 
-	self assert: class cormasInstances size equals: 0
+	self assert: (self instancesOfClass: class) size equals: 0
 ]
 
 { #category : #tests }
@@ -51,6 +65,6 @@ TCMMetaClassTest >> testNewCormasInstanceKnowsItsClass [
 	class := self cormasClassNamed: 'Cow'.
 	instance := self newCormasInstanceFor: class.
 
-	self assert: instance cormasClass equals: class.
+	self assert: (self classOfInstance: instance) equals: class.
 
 ]

@@ -10,11 +10,23 @@ Class {
 }
 
 { #category : #running }
+CMMetaFamixClassTest >> classOfInstance: anObject [
+
+	^ anObject cormasClass
+]
+
+{ #category : #running }
 CMMetaFamixClassTest >> cormasClassNamed: aString [
 
 	^ CMMetaClass new
 		name: aString ;
 		yourself
+]
+
+{ #category : #running }
+CMMetaFamixClassTest >> instancesOfClass: aClass [
+
+	^ aClass cormasInstances
 ]
 
 { #category : #running }
