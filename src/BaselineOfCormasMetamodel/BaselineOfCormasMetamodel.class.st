@@ -20,7 +20,10 @@ BaselineOfCormasMetamodel >> specForBaselines: spec [
 
 	spec
 		baseline: 'Cormas'
-		with: [ spec loads: 'Core'; repository: 'github://cormas/cormas' ].
+		with: [ spec loads: 'Core'; repository: 'github://cormas/cormas' ];
+		
+		baseline: 'Famix'
+		with: [ spec repository: 'github://moosetechnology/Famix:development/src' ].
 ]
 
 { #category : #specs }
@@ -28,7 +31,7 @@ BaselineOfCormasMetamodel >> specForGroups: spec [
 
 	spec
 		group: 'default'
-		with: #('Cormas-Metamodel' 'Cormas-Tests').
+		with: #('Cormas-Tests').
 ]
 
 { #category : #specs }
@@ -38,6 +41,9 @@ BaselineOfCormasMetamodel >> specForPackages: spec [
 		package: 'Cormas-Metamodel'
 		with: [ spec requires: #('Cormas') ];
 		
+		package: 'Cormas-Metamodel-Famix'
+		with: [ spec requires: 'Famix' ];
+		
 		package: 'Cormas-Metamodel-Tests'
-		with: [ spec requires: #('Cormas-Metamodel') ].
+		with: [ spec requires: #('Cormas-Metamodel' 'Cormas-Metamodel-Famix') ].
 ]
