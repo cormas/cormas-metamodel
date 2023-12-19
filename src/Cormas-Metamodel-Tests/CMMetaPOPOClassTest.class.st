@@ -15,16 +15,10 @@ CMMetaPOPOClassTest >> classOfInstance: anObject [
 { #category : #running }
 CMMetaPOPOClassTest >> cormasClassNamed: aString [
 
-	| packageName class |
-	packageName := self class package name.
-	
-	class := CMAgent << aString asSymbol
+	^ CMAgent << aString asSymbol
 		traits: { TCMLocated };
 		slots: { };
-		package: packageName;
-		install.
-		
-	^ class
+		build
 ]
 
 { #category : #running }
