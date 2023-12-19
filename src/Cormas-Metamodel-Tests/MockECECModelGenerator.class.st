@@ -37,6 +37,13 @@ MockECECModelGenerator >> createAllEntities [
 	self createMethodModelClassUnrestrainedForagersAccessor.
 	self createMethodModelClassRestrainedForagersAccessor.
 	self createMethodModelClassCellsAccessor.
+	self createMethodModelClassInit.
+	self createMethodModelClassInitializeAgents.
+	self createMethodCellClassPovBiomass.
+	self createMethodForagerClassPov.
+	self createMethodUnrestrainedForagerClassPov.
+	self createMethodRestrainedForagerClassPov.
+	self createMethodCellClassInitializeWithRandomBiomass.
 ]
 
 { #category : #'creating entities - classes' }
@@ -63,6 +70,33 @@ MockECECModelGenerator >> createForagerClass [
 ]
 
 { #category : #'creating entities - methods' }
+MockECECModelGenerator >> createMethodCellClassInitializeWithRandomBiomass [
+
+	self
+		createMethodInClass: cellClass
+		sourceCode: self sourceCodeCellClassInitializeWithRandomBiomass
+		protocol: 'initialization'
+]
+
+{ #category : #'creating entities - methods' }
+MockECECModelGenerator >> createMethodCellClassPovBiomass [
+
+	self
+		createMethodInClass: cellClass
+		sourceCode: self sourceCodeCellClassPovBiomass
+		protocol: 'pov'
+]
+
+{ #category : #'creating entities - methods' }
+MockECECModelGenerator >> createMethodForagerClassPov [
+
+	self
+		createMethodInClass: foragerClass
+		sourceCode: self sourceCodeForagerClassPov
+		protocol: 'pov'
+]
+
+{ #category : #'creating entities - methods' }
 MockECECModelGenerator >> createMethodInClass: aClass sourceCode: aSourceCode protocol: aProtocol [
 
 	aClass compile: aSourceCode classified: aProtocol
@@ -78,12 +112,30 @@ MockECECModelGenerator >> createMethodModelClassCellsAccessor [
 ]
 
 { #category : #'creating entities - methods' }
+MockECECModelGenerator >> createMethodModelClassInit [
+
+	self
+		createMethodInClass: modelClass
+		sourceCode: self sourceCodeModelClassInit
+		protocol: 'init'
+]
+
+{ #category : #'creating entities - methods' }
 MockECECModelGenerator >> createMethodModelClassInitialize [
 
 	self
 		createMethodInClass: modelClass
 		sourceCode: self sourceCodeModelClassInitialize
 		protocol: 'initialization'
+]
+
+{ #category : #'creating entities - methods' }
+MockECECModelGenerator >> createMethodModelClassInitializeAgents [
+
+	self
+		createMethodInClass: modelClass
+		sourceCode: self sourceCodeModelClassInitializeAgents
+		protocol: 'init entities'
 ]
 
 { #category : #'creating entities - methods' }
@@ -102,6 +154,24 @@ MockECECModelGenerator >> createMethodModelClassUnrestrainedForagersAccessor [
 		createMethodInClass: modelClass
 		sourceCode: self sourceCodeModelClassUnrestrainedForagersAccessor
 		protocol: 'accessing'
+]
+
+{ #category : #'creating entities - methods' }
+MockECECModelGenerator >> createMethodRestrainedForagerClassPov [
+
+	self
+		createMethodInClass: restrainedForagerClass
+		sourceCode: self sourceCodeRestrainedForagerClassPov
+		protocol: 'pov'
+]
+
+{ #category : #'creating entities - methods' }
+MockECECModelGenerator >> createMethodUnrestrainedForagerClassPov [
+
+	self
+		createMethodInClass: unrestrainedForagerClass
+		sourceCode: self sourceCodeUnrestrainedForagerClassPov
+		protocol: 'pov'
 ]
 
 { #category : #'creating entities - classes' }
@@ -230,6 +300,34 @@ MockECECModelGenerator >> restrainedForagersAccessor [
 ]
 
 { #category : #'methods source code' }
+MockECECModelGenerator >> sourceCodeCellClassInitializeWithRandomBiomass [
+
+	^ 'initializeWithRandomBiomass
+
+	biomass := Cormas random'
+]
+
+{ #category : #'methods source code' }
+MockECECModelGenerator >> sourceCodeCellClassPovBiomass [
+
+	^ 'povBiomass
+
+	^ self
+		povAttribute: #biomass
+		min: 0
+		max: self class k
+		color: Color green'
+]
+
+{ #category : #'methods source code' }
+MockECECModelGenerator >> sourceCodeForagerClassPov [
+
+	^ 'pov
+
+	self subclassResponsibility'
+]
+
+{ #category : #'methods source code' }
 MockECECModelGenerator >> sourceCodeModelClassCellsAccessor [
 
 	^ String streamContents: [ :stream |
@@ -240,6 +338,32 @@ MockECECModelGenerator >> sourceCodeModelClassCellsAccessor [
 			nextPutAll: '>'; cr; tab;
 			nextPutAll: '^ ';
 			nextPutAll: self cellsAccessor ]
+]
+
+{ #category : #'methods source code' }
+MockECECModelGenerator >> sourceCodeModelClassInit [
+
+	^ String streamContents: [ :stream |
+		stream
+			nextPutAll: 'init
+
+	self
+		createGridLines: 27
+		columns: 27
+		neighbourhood: 8
+		closed: false.
+		
+	self ';
+			nextPutAll: self cellsAccessor;
+			nextPutAll: ' do: [ :each | each initializeWithRandomBiomass ].
+	
+	self
+		initializeAgents;
+		displayPov: #povBiomass of: ';
+			nextPutAll: self cellClassName;
+			nextPutAll: ';
+		displayPov: #defaultPOV of: ';
+			nextPutAll: self foragerClassName ].
 ]
 
 { #category : #'methods source code' }
@@ -255,6 +379,24 @@ MockECECModelGenerator >> sourceCodeModelClassInitialize [
 			nextPutAll: ' := OrderedCollection new.'; cr; tab;
 			nextPutAll: self cellsAccessor;
 			nextPutAll: ' := OrderedCollection new.'; cr; tab ]
+]
+
+{ #category : #'methods source code' }
+MockECECModelGenerator >> sourceCodeModelClassInitializeAgents [
+
+	^ String streamContents: [ :stream |
+		stream
+			nextPutAll: 'initializeAgents'; cr; cr; tab;
+			nextPutAll: 'self'; cr; tab; tab;
+			nextPutAll: 'createN: 10'; cr; tab; tab;
+			nextPutAll: 'randomlyLocatedAloneEntities: ';
+			nextPutAll: self unrestrainedForagerClassName;
+			nextPutAll: '.'; cr; cr; tab;
+			nextPutAll: 'self'; cr; tab; tab;
+			nextPutAll: 'createN: 10'; cr; tab; tab;
+			nextPutAll: 'randomlyLocatedAloneEntities: ';
+			nextPutAll: self restrainedForagerClassName;
+			nextPutAll: '.' ].
 ]
 
 { #category : #'methods source code' }
@@ -281,6 +423,22 @@ MockECECModelGenerator >> sourceCodeModelClassUnrestrainedForagersAccessor [
 			nextPutAll: '>'; cr; tab;
 			nextPutAll: '^ ';
 			nextPutAll: self unrestrainedForagersAccessor ]
+]
+
+{ #category : #'methods source code' }
+MockECECModelGenerator >> sourceCodeRestrainedForagerClassPov [
+
+	^ 'pov
+
+	^ Color blue'
+]
+
+{ #category : #'methods source code' }
+MockECECModelGenerator >> sourceCodeUnrestrainedForagerClassPov [
+
+	^ 'pov
+
+	^ Color red'
 ]
 
 { #category : #'entity names' }
